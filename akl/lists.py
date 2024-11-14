@@ -1,7 +1,12 @@
 from flask import Flask
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+
 import model
+
+from datetime import datetime
+
+
 
 
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash
@@ -14,28 +19,25 @@ lists_db = []
 # Rota para exibir todas as listas (List)
 @lists.route('/')
 def list_lists():
+    data = model.list_all_lists()
+    return render_template('lists/index.html' , data=data)
 
-    return render_template('lists/index.html')
 
 
-
-# Rota para criar uma nova lista (Create)
 @lists.route('/cadastrar', methods=['GET', 'POST'])
 def create_list():
     if request.method == 'POST':
+        # Receber os dados do formulário
         name = request.form['name']
+        description = request.form['description']
+        tag = request.form.get('tag')  # 'get' retorna None se o campo não for preenchido
+        data_closing = request.form.get('data_closing')  # Pode ser None se o campo não for preenchido
         
-        # Validação simples: nome não pode ser vazio ou muito curto
-        if not name or len(name) < 3:
-            flash('O nome da lista deve ter pelo menos 3 caracteres.', 'error')
-            return render_template('lists/create_list.html')
+
+
+        # Criar a nova lista
+        data = model.create_list(name,description,tag,data_closing)
         
-        # Criando a nova lista e adicionando ao banco de dados simulado
-        new_list = {'id': len(lists_db) + 1, 'name': name}
-        lists_db.append(new_list)
-        
-        # Flash message de sucesso
-        flash('Lista cadastrada com sucesso!', 'success')
         
         return redirect(url_for('lists.list_lists'))
     
@@ -64,9 +66,9 @@ def delete_list(id):
     return redirect(url_for('lists.list_lists'))
 
 # Rota para visualizar os detalhes de uma lista (View)
-@lists.route('/visualizar/<int:id>')
-def view_list(id):
-    list_item = next((l for l in lists_db if l['id'] == id), None)
+@lists.route('/visualizar/<int:list_id>')
+def view_list(list_id):
+    list_item = next((l for l in lists_db if l['list_id'] == id), None)
     if not list_item:
         return f"Lista com id {id} não encontrada", 404
     return render_template('lists/view_list.html', list_item=list_item)
@@ -74,3 +76,9 @@ def view_list(id):
 # Função para configurar o blueprint
 def configure(app):
     app.register_blueprint(lists)
+
+
+
+
+
+
