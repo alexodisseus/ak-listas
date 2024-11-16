@@ -78,3 +78,28 @@ def list_all_lists():
     # Recupera todas as listas ordenadas pelo campo 'data_create' (se quiser ordenar de forma diferente, altere aqui)
     listas = Lista.query.all()
     return listas
+
+
+
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+    description = db.Column(db.String(120), nullable=False)  
+    measure = db.Column(db.String(120), nullable=False)  
+    tag = db.Column(db.String(120)) 
+    data_create = db.Column(db.Date, default=datetime.utcnow().date(), nullable=False)  
+    
+    def __repr__(self):
+        return f'<Item {self.name}>'
+
+
+
+
+def list_all_itens():
+    """
+    Função para listar todas as listas no banco de dados.
+    :return: Lista de objetos Lista.
+    """
+    # Recupera todas as listas ordenadas pelo campo 'data_create' (se quiser ordenar de forma diferente, altere aqui)
+    itens = Item.query.all()
+    return itens

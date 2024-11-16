@@ -11,21 +11,21 @@ from datetime import datetime
 
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash
 
-lists = Blueprint('lists', __name__, url_prefix='/')
+itens = Blueprint('itens', __name__, url_prefix='/item')
 
 # Suponha que temos uma lista de dicionários para simular um banco de dados
-lists_db = []
+itens_db = []
 
 # Rota para exibir todas as listas (List)
-@lists.route('/')
-def list_lists():
-    data = model.list_all_lists()
-    return render_template('lists/index.html' , data=data)
+@itens.route('/')
+def list_itens():
+    data = model.list_all_itens()
+    return render_template('itens/index.html' , data=data)
 
 
 
-@lists.route('/cadastrar', methods=['GET', 'POST'])
-def create_list():
+@itens.route('/cadastrar', methods=['GET', 'POST'])
+def create_iten():
     if request.method == 'POST':
         # Receber os dados do formulário
         name = request.form['name']
@@ -39,46 +39,46 @@ def create_list():
         data = model.create_list(name,description,tag,data_closing)
         
         
-        return redirect(url_for('lists.list_lists'))
+        return redirect(url_for('itens.list_itens'))
     
-    return render_template('lists/create_list.html')
+    return render_template('itens/create_iten.html')
 
 # Rota para editar uma lista (Update)
-@lists.route('/editar/<int:id>', methods=['GET', 'POST'])
+@itens.route('/editar/<int:id>', methods=['GET', 'POST'])
 def update_list(id):
-    list_item = next((l for l in lists_db if l['id'] == id), None)
+    list_item = next((l for l in itens_db if l['id'] == id), None)
     if not list_item:
         return f"Lista com id {id} não encontrada", 404
     
     if request.method == 'POST':
         list_item['name'] = request.form['name']
         flash('Lista atualizada com sucesso!', 'success')
-        return redirect(url_for('lists.list_lists'))
+        return redirect(url_for('itens.list_itens'))
     
-    return render_template('lists/update_list.html', list_item=list_item)
+    return render_template('itens/update_list.html', list_item=list_item)
 
 # Rota para deletar uma lista (Delete)
-@lists.route('/deletar/<int:id>', methods=['POST'])
+@itens.route('/deletar/<int:id>', methods=['POST'])
 def delete_list(id):
-    global lists_db
-    lists_db = [l for l in lists_db if l['id'] != id]
+    global itens_db
+    itens_db = [l for l in itens_db if l['id'] != id]
     flash('Lista deletada com sucesso!', 'success')
-    return redirect(url_for('lists.list_lists'))
+    return redirect(url_for('itens.list_itens'))
 
 
 
 
 # Rota para visualizar os detalhes de uma lista (View)
-@lists.route('/ver/<int:list_id>')
+@itens.route('ver/<int:list_id>')
 def view_list(list_id):
-    list_item = next((l for l in lists_db if l['list_id'] == id), None)
+    list_item = next((l for l in itens_db if l['list_id'] == id), None)
     if not list_item:
         return f"Lista com id {id} não encontrada", 404
-    return render_template('lists/view_list.html', list_item=list_item)
+    return render_template('itens/view_list.html', list_item=list_item)
 
 # Função para configurar o blueprint
 def configure(app):
-    app.register_blueprint(lists)
+    app.register_blueprint(itens)
 
 
 

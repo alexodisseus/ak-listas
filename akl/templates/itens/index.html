@@ -7,14 +7,14 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Listas:</h3>
+    <h3>Itens cadastrados:</h3>
 
     <!-- Lista para os itens adicionados -->
-    <ul class="list" id="list">
+    <ul class="list" id="item-list">
         {% if data != [] %}
             {% for x in data %}
                 <li class="list-item">
-                    <a href="{{ url_for('lists.view_list', list_id=x.id) }}" class="list-link">
+                    <a href="{{ url_for('itens.view_list', list_id=x.id) }}" class="list-link">
                         <span class="material-icons list-icon">add</span>
                     </a>
                         <span class="list-text">{{ x.name }} - {{ x.tag }}</span>
@@ -25,10 +25,12 @@
         {% endif %}
     </ul>
 
+    </ul>
+
     <!-- Botão de adição -->
     <div class="add-button" id="addButton">
-        <a href="{{ url_for('lists.create_list') }}" class="add-button-link">
-            <span class="material-icons">add</span> Criar nova lista
+        <a href="{{ url_for('itens.create_iten') }}" class="add-button-link">
+            <span class="material-icons">add</span> Adicionar novo item
         </a>
     </div>
     
