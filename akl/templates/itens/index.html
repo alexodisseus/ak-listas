@@ -14,7 +14,7 @@
         {% if data != [] %}
             {% for x in data %}
                 <li class="list-item">
-                    <a href="{{ url_for('itens.view_list', list_id=x.id) }}" class="list-link">
+                    <a href="{{ url_for('itens.view_iten', iten_id=x.id) }}" class="list-link">
                         <span class="material-icons list-icon">add</span>
                     </a>
                         <span class="list-text">{{ x.name }} - {{ x.tag }}</span>

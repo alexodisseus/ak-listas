@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+
+{% block content %}
+        <h3>Detalhes do Item</h3>
+
+        {% if iten %}
+            <div class="iten-details">
+                <p><strong>Nome:</strong> {{ iten.name }}</p>
+                <p><strong>Descrição:</strong> {{ iten.description }}</p>
+                <p><strong>Unidade de Medida:</strong> {{ iten.measure }}</p>
+                <p><strong>Tag:</strong> {{ iten.tag if iten.tag else "Não definida" }}</p>
+                <p><strong>Data de Criação:</strong> {{ iten.data_create }}</p>
+            </div>
+
+            <div class="action-buttons">
+                <!-- Botões para editar ou excluir o iten -->
+                <a href="{{ url_for('itens.edit_iten', iten_id=iten.id) }}" class="btn btn-primary">Editar</a>
+                <a href="{{ url_for('itens.delete_iten', iten_id=iten.id) }}" class="btn btn-danger">Excluir</a>
+            
+            </div>
+        {% else %}
+            <p>Iten não encontrado.</p>
+        {% endif %}
+    
+{% endblock %}

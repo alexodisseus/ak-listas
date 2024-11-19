@@ -1,39 +1,35 @@
 {% extends "base.html" %}
 
 {% block styles %}
-    <link rel="stylesheet"
-                  href="{{url_for('static', filename='index.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 {% endblock %}
+
 {% block content %}
-
-
 </head>
 <body>
-        
     <div>
-    <h3>Criar Novo Item</h3>
+        <h3>Criar Novo Item</h3>
     </div>
-        <br>
+    <br>
     <!-- Contêiner do campo de entrada e botão adicionar -->
     <div>
-        <form action="{{ url_for('lists.create_list') }}" method="post">
-            <!-- Nome da Lista -->
-            <input type="text" id="listName" name="name" placeholder="Digite o nome da lista" required>
+        <form action="{{ url_for('itens.create_iten') }}" method="post">
+            <!-- Nome do Item -->
+            <input type="text" id="itemName" name="name" placeholder="Digite o nome do item" required>
 
-            <!-- Descrição da Lista -->
-            <input type="text" id="listDescription" name="description" placeholder="Descrição da lista" required>
+            <!-- Descrição do Item -->
+            <input type="text" id="itemDescription" name="description" placeholder="Descrição do item" required>
 
-            <!-- Tag da Lista -->
-            <input type="text" id="listTag" name="tag" placeholder="Tag opcional">
+            <!-- Unidade de Medida do Item -->
+            <input type="text" id="itemMeasure" name="measure" placeholder="Unidade de medida" required>
 
-            <!-- Data de Fechamento (opcional) -->
-            <input type="date" id="listClosingDate" name="data_closing" placeholder="Data de Fechamento">
+            <!-- Tag do Item (opcional) -->
+            <input type="text" id="itemTag" name="tag" placeholder="Tag opcional">
 
-            <!-- Botão de adicionar lista -->
+
+            <!-- Botão de adicionar item -->
             <button type="submit">Adicionar</button>
         </form>
     </div>
-
 </body>
-
 {% endblock %}

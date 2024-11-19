@@ -13,10 +13,8 @@ from flask import Flask, Blueprint, render_template, request, redirect, url_for,
 
 itens = Blueprint('itens', __name__, url_prefix='/item')
 
-# Suponha que temos uma lista de dicionários para simular um banco de dados
-itens_db = []
 
-# Rota para exibir todas as listas (List)
+
 @itens.route('/')
 def list_itens():
     data = model.list_all_itens()
@@ -30,51 +28,89 @@ def create_iten():
         # Receber os dados do formulário
         name = request.form['name']
         description = request.form['description']
-        tag = request.form.get('tag')  # 'get' retorna None se o campo não for preenchido
-        data_closing = request.form.get('data_closing')  # Pode ser None se o campo não for preenchido
+        measure = request.form['measure']
+        tag = request.form['tag']
         
 
 
         # Criar a nova lista
-        data = model.create_list(name,description,tag,data_closing)
+        data = model.create_iten(name,description,measure,tag)
         
         
         return redirect(url_for('itens.list_itens'))
     
     return render_template('itens/create_iten.html')
 
+
 # Rota para editar uma lista (Update)
-@itens.route('/editar/<int:id>', methods=['GET', 'POST'])
-def update_list(id):
-    list_item = next((l for l in itens_db if l['id'] == id), None)
-    if not list_item:
-        return f"Lista com id {id} não encontrada", 404
+
+@itens.route('/editar/<int:iten_id>', methods=['GET', 'POST'])
+def edit_iten(iten_id):
     
+    list_iten = model.get_iten_id(iten_id)
+    
+    if not list_iten:
+        flash("Item não encontrado!", "error")
+        return redirect(url_for('items.view_item', item_id=item_id))
+    
+
     if request.method == 'POST':
-        list_item['name'] = request.form['name']
-        flash('Lista atualizada com sucesso!', 'success')
-        return redirect(url_for('itens.list_itens'))
+        # Obtém os dados do formulário
+        name = request.form['name']
+        description = request.form['description']
+        measure = request.form['measure']
+        tag = request.form['tag']
+        itens = model.update_iten_id(iten_id , name,description,measure,tag)
+        
+        if itens:
+            flash('Lista atualizada com sucesso!', 'success')
+            return redirect(url_for('itens.list_itens'))
     
-    return render_template('itens/update_list.html', list_item=list_item)
+
+
+    print(list_iten.id)
+
+
+
+    return render_template('itens/update_iten.html', list_iten=list_iten)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Rota para deletar uma lista (Delete)
-@itens.route('/deletar/<int:id>', methods=['POST'])
-def delete_list(id):
-    global itens_db
-    itens_db = [l for l in itens_db if l['id'] != id]
-    flash('Lista deletada com sucesso!', 'success')
-    return redirect(url_for('itens.list_itens'))
+@itens.route('/deletar/<int:iten_id>')
+def delete_iten(iten_id):
+    
+    iten_delete = model.delete_iten_id(iten_id)
 
+    if iten_delete:
+        flash('Lista deletada com sucesso!', 'success')
+        return redirect(url_for('itens.list_itens'))
+    else:
+        return f"ite com id {iten_id} não encontrado", 404
 
 
 
 # Rota para visualizar os detalhes de uma lista (View)
-@itens.route('ver/<int:list_id>')
-def view_list(list_id):
-    list_item = next((l for l in itens_db if l['list_id'] == id), None)
+@itens.route('ver/<int:iten_id>')
+def view_iten(iten_id):
+    list_item = model.get_iten_id(iten_id)
     if not list_item:
         return f"Lista com id {id} não encontrada", 404
-    return render_template('itens/view_list.html', list_item=list_item)
+    return render_template('itens/view_iten.html', iten=list_item)
 
 # Função para configurar o blueprint
 def configure(app):

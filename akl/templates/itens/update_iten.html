@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+
+{% block content %}
+        <h3>Editar Item</h3>
+
+        <form action="{{ url_for('itens.edit_iten', iten_id=list_iten.id) }}" method="POST">
+            <!-- Nome do Item -->
+            <div class="form-group">
+                <label for="name">Nome do Item:</label>
+                <input type="text" id="name" name="name" value="{{ list_iten.name }}" class="form-control" required>
+            </div>
+
+            <!-- Descrição do Item -->
+            <div class="form-group">
+                <label for="description">Descrição do Item:</label>
+                <input type="text" id="description" name="description" value="{{ list_iten.description }}" class="form-control" required>
+            </div>
+
+            <!-- Unidade de Medida -->
+            <div class="form-group">
+                <label for="measure">Unidade de Medida:</label>
+                <input type="text" id="measure" name="measure" value="{{ list_iten.measure }}" class="form-control" required>
+            </div>
+
+            <!-- Tag do Item -->
+            <div class="form-group">
+                <label for="tag">Tag (Opcional):</label>
+                <input type="text" id="tag" name="tag" value="{{ list_iten.tag }}" class="form-control">
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                
+            </div>
+        </form>
+{% endblock %}
