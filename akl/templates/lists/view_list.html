@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <!-- Adicionando Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{{list_item}}
+{% for x in list_item %}
+{{x.name}}
+{% endfor %}
+    <h3>Listas:</h3>
+
+    <!-- Lista para os itens adicionados -->
+    <ul class="list" id="list">
+        {% if data != [] %}
+            {% for x in data %}
+                <li class="list-item">
+                    <a href="{{ url_for('lists.view_list', list_id=x.id) }}" class="list-link">
+                        <span class="material-icons list-icon">add</span>
+                    </a>
+                        <span class="list-text">{{ x.name }} - {{ x.tag }}</span>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="empty-list">Lista vazia</li>
+        {% endif %}
+    </ul>
+
+    <!-- Botão de adição -->
+    <div class="add-button" id="addButton">
+        <a href="{{ url_for('lists.create_list') }}" class="add-button-link">
+            <span class="material-icons">add</span> Criar nova lista
+        </a>
+    </div>
+    
+{% endblock %}

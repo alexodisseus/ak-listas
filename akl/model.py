@@ -212,3 +212,30 @@ class ListaItem(db.Model):
 
     def __repr__(self):
         return f'<ListaItem Lista {self.lista_id} - Item {self.item_id}, Quantidade {self.quantidade}>'
+
+
+
+
+def get_iten_listid(list_id):
+    
+    #está listando 1 só, mudar para trazer a lista conforme id da lista
+    itens_lista = db.session.query(ListaItem).filter(ListaItem.lista_id == list_id).first()
+    
+    return [itens_lista.item]
+
+
+def set_iten_to_list(list_id, iten_id , quantidade):
+    lista = Lista.query.get(list_id)
+    
+    item = Item.query.get(iten_id)
+
+    lista_item = ListaItem()
+    lista_item.lista_id = lista.id
+    
+    lista_item.item_id = item.id
+    
+    lista_item.quantidade = quantidade
+    
+    db.session.add(lista_item)
+    db.session.commit()
+    return lista_item

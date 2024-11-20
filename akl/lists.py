@@ -71,10 +71,25 @@ def delete_list(id):
 # Rota para visualizar os detalhes de uma lista (View)
 @lists.route('/ver/<int:list_id>')
 def view_list(list_id):
-    list_item = next((l for l in lists_db if l['list_id'] == id), None)
-    if not list_item:
-        return f"Lista com id {id} não encontrada", 404
+
+    
+    list_item = model.get_iten_listid(list_id)
+    
     return render_template('lists/view_list.html', list_item=list_item)
+    
+
+# Rota para add item na lista
+@lists.route('/add/<int:list_id>')
+def add_item_list(list_id):
+
+    lista_item = model.set_iten_to_list(1,1,1)
+    
+    print(lista_item)
+    return redirect(url_for('lists.view_list' , list_id = 1))
+    
+    
+
+
 
 # Função para configurar o blueprint
 def configure(app):
