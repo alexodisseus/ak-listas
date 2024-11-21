@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet"
+                  href="{{url_for('static', filename='index.css')}}">
+{% endblock %}
+{% block content %}
+
+
+</head>
+<body>
+        
+    <div>
+    <h3>Criar Nova Lista</h3>
+    </div>
+        <br>
+    <!-- Contêiner do campo de entrada e botão adicionar -->
+    <div>
+        <form action="{{ url_for('lists.create_list') }}" method="post">
+            <!-- Nome da Lista -->
+            <input type="text" id="listName" name="name" placeholder="Digite o nome da lista" required>
+
+            <!-- Descrição da Lista -->
+            <input type="text" id="listDescription" name="description" placeholder="Descrição da lista" required>
+
+            <!-- Tag da Lista -->
+            <input type="text" id="listTag" name="tag" placeholder="Tag opcional">
+
+            <!-- Data de Fechamento (opcional) -->
+            <input type="date" id="listClosingDate" name="data_closing" placeholder="Data de Fechamento">
+
+            <!-- Botão de adicionar lista -->
+            <button type="submit">Adicionar</button>
+        </form>
+    </div>
+
+</body>
+
+{% endblock %}

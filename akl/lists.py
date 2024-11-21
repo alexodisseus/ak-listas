@@ -24,7 +24,7 @@ def list_lists():
 
 
 
-@lists.route('/cadastrar', methods=['GET', 'POST'])
+@lists.route('listas/cadastrar', methods=['GET', 'POST'])
 def create_list():
     if request.method == 'POST':
         # Receber os dados do formulário
@@ -44,7 +44,7 @@ def create_list():
     return render_template('lists/create_list.html')
 
 # Rota para editar uma lista (Update)
-@lists.route('/editar/<int:id>', methods=['GET', 'POST'])
+@lists.route('listas/editar/<int:id>', methods=['GET', 'POST'])
 def update_list(id):
     list_item = next((l for l in lists_db if l['id'] == id), None)
     if not list_item:
@@ -58,7 +58,7 @@ def update_list(id):
     return render_template('lists/update_list.html', list_item=list_item)
 
 # Rota para deletar uma lista (Delete)
-@lists.route('/deletar/<int:id>', methods=['POST'])
+@lists.route('listas/deletar/<int:id>', methods=['POST'])
 def delete_list(id):
     global lists_db
     lists_db = [l for l in lists_db if l['id'] != id]
@@ -69,24 +69,17 @@ def delete_list(id):
 
 
 # Rota para visualizar os detalhes de uma lista (View)
-@lists.route('/ver/<int:list_id>')
+@lists.route('listas/ver/<int:list_id>')
 def view_list(list_id):
 
     
-    list_item = model.get_iten_listid(list_id)
+    #list_item = model.get_iten_listid(list_id)
+    
+    list_item = model.get_lista_com_itens(list_id)
     
     return render_template('lists/view_list.html', list_item=list_item)
     
 
-# Rota para add item na lista
-@lists.route('/add/<int:list_id>')
-def add_item_list(list_id):
-
-    lista_item = model.set_iten_to_list(1,1,1)
-    
-    print(lista_item)
-    return redirect(url_for('lists.view_list' , list_id = 1))
-    
     
 
 

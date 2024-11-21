@@ -239,3 +239,33 @@ def set_iten_to_list(list_id, iten_id , quantidade):
     db.session.add(lista_item)
     db.session.commit()
     return lista_item
+
+
+def get_lista_com_itens(lista_id):
+    # Buscar a lista pelo ID
+    lista = Lista.query.get(lista_id)
+    
+    # Verificar se a lista foi encontrada
+    
+    # Buscar os itens dessa lista, incluindo a quantidade de cada item
+    lista_itens = []
+    for lista_item in lista.lista_itens:  # Acesso via relacionamento (backref)
+        lista_itens.append({
+            "item_id": lista_item.item.id,
+            "item_name": lista_item.item.name,
+            "quantidade": lista_item.quantidade,
+            "descricao": lista_item.item.description
+        })
+    
+    # Preparar os dados da lista com seus itens
+    dados_lista = {
+        "id": lista.id,
+        "name": lista.name,
+        "description": lista.description,
+        "data_create": lista.data_create,
+        "data_closing": lista.data_closing,
+        "tag": lista.tag,
+        "itens": lista_itens  # Lista de itens
+    }
+    
+    return dados_lista

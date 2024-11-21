@@ -1,5 +1,7 @@
 import lists
 import itens
+import list_itens
+
 import model
 
 from flask import Flask
@@ -22,4 +24,6 @@ db.init_app(app)
 
 lists.configure(app)
 itens.configure(app)
+
+list_itens.configure(app)
 

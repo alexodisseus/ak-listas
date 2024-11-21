@@ -7,23 +7,36 @@
 {% endblock %}
 
 {% block content %}
-{{list_item}}
-{% for x in list_item %}
-{{x.name}}
-{% endfor %}
     <h3>Listas:</h3>
 
     <!-- Lista para os itens adicionados -->
     <ul class="list" id="list">
-        {% if data != [] %}
-            {% for x in data %}
+        {% if list_item %}
+            <li class="list-item">
+                <!-- Link para ver os detalhes da lista -->
+                <a href="{{ url_for('lists.view_list', list_id=list_item.id) }}" class="list-link">
+                    <span class="material-icons list-icon">add</span>
+                </a>
+                <span class="list-text">
+                    <strong>{{ list_item.name }}</strong> - {{ list_item.tag }}<br>
+                    <span>{{ list_item.description }}</span><br>
+                    <span>Data de Criação: {{ list_item.data_create.strftime('%d/%m/%Y') }}</span><br>
+                    <span>Data de Fechamento: {{ list_item.data_closing.strftime('%d/%m/%Y') }}</span>
+                </span>
+            </li>
+            
+            <!-- Exibindo os itens dentro da lista -->
+            {% for item in list_item.itens %}
                 <li class="list-item">
-                    <a href="{{ url_for('lists.view_list', list_id=x.id) }}" class="list-link">
-                        <span class="material-icons list-icon">add</span>
-                    </a>
-                        <span class="list-text">{{ x.name }} - {{ x.tag }}</span>
+                    <span class="material-icons list-icon">check</span>
+                    <span class="list-text">
+                        <strong>{{ item.item_name }}</strong><br>
+                        Quantidade: {{ item.quantidade }}<br>
+                        Descrição: {{ item.descricao }}
+                    </span>
                 </li>
             {% endfor %}
+
         {% else %}
             <li class="empty-list">Lista vazia</li>
         {% endif %}
@@ -31,8 +44,8 @@
 
     <!-- Botão de adição -->
     <div class="add-button" id="addButton">
-        <a href="{{ url_for('lists.create_list') }}" class="add-button-link">
-            <span class="material-icons">add</span> Criar nova lista
+        <a href="{{ url_for('list_itens.add_list' , list_id =list_item.id ) }}" class="add-button-link">
+            <span class="material-icons">add</span> Adicionar itens
         </a>
     </div>
     
