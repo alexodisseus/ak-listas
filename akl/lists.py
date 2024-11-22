@@ -14,7 +14,7 @@ from flask import Flask, Blueprint, render_template, request, redirect, url_for,
 lists = Blueprint('lists', __name__, url_prefix='/')
 
 # Suponha que temos uma lista de dicionários para simular um banco de dados
-lists_db = []
+
 
 # Rota para exibir todas as listas (List)
 @lists.route('/')
@@ -44,24 +44,33 @@ def create_list():
     return render_template('lists/create_list.html')
 
 # Rota para editar uma lista (Update)
-@lists.route('listas/editar/<int:id>', methods=['GET', 'POST'])
-def update_list(id):
-    list_item = next((l for l in lists_db if l['id'] == id), None)
-    if not list_item:
-        return f"Lista com id {id} não encontrada", 404
-    
+
+@lists.route('listas/editar/<int:list_id>', methods=['GET', 'POST'])
+def update_list(list_id):
+    data = model.get_list_id(list_id)
+
     if request.method == 'POST':
-        list_item['name'] = request.form['name']
+        
+        name = request.form['name']
+        description = request.form['description']
+        tag = request.form['tag']
+        data_closing = request.form['data_closing']
+        
+        data = model.update_list_id(list_id, name , description , tag , data_closing)
+
         flash('Lista atualizada com sucesso!', 'success')
-        return redirect(url_for('lists.list_lists'))
+        return redirect(url_for('lists.view_list' , list_id=list_id))
     
-    return render_template('lists/update_list.html', list_item=list_item)
+    
+    return render_template('lists/update_list.html', data=data)
+
+
 
 # Rota para deletar uma lista (Delete)
-@lists.route('listas/deletar/<int:id>', methods=['POST'])
-def delete_list(id):
-    global lists_db
-    lists_db = [l for l in lists_db if l['id'] != id]
+@lists.route('listas/deletar/<int:list_id>')
+def delete_list(list_id):
+    
+    deleted = model.delete_list_id(list_id)
     flash('Lista deletada com sucesso!', 'success')
     return redirect(url_for('lists.list_lists'))
 

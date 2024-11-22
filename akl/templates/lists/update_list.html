@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+
+{% block content %}
+<body>
+    <div>
+        <h3>Atualizar Lista</h3>
+    </div>
+    <br>
+
+    <!-- Contêiner do campo de entrada e botão atualizar -->
+    <div>
+        <form action="{{ url_for('lists.update_list', list_id=data.id) }}" method="post">
+            <!-- Método PUT para atualização -->
+            <input type="hidden" name="_method" value="PUT">
+
+            <!-- Nome da Lista -->
+            <div>
+                <label for="listName">Nome da Lista:</label>
+                <input type="text" id="listName" name="name" value="{{ data.name }}" placeholder="Digite o nome da lista" required>
+            </div>
+
+            <!-- Descrição da Lista -->
+            <div>
+                <label for="listDescription">Descrição:</label>
+                <input type="text" id="listDescription" name="description" value="{{ data.description }}" placeholder="Descrição da lista" required>
+            </div>
+
+            <!-- Tag da Lista -->
+            <div>
+                <label for="listTag">Tag (opcional):</label>
+                <input type="text" id="listTag" name="tag" value="{{ data.tag }}" placeholder="Tag opcional">
+            </div>
+
+            <!-- Data de Fechamento (opcional) -->
+            <div>
+                <label for="listClosingDate">Data de Fechamento:</label>
+                <input type="date" id="listClosingDate" name="data_closing" value="{{ data.data_closing }}" placeholder="Data de Fechamento">
+            </div>
+
+            <!-- Botão de atualizar lista -->
+            <div>
+                <button type="submit">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</body>
+{% endblock %}

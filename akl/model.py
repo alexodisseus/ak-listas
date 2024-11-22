@@ -16,6 +16,8 @@ class Lista(db.Model):
     tag = db.Column(db.String(120)) 
     data_create = db.Column(db.Date, default=datetime.utcnow().date(), nullable=False)  
     data_closing = db.Column(db.Date, nullable=True)  # Agora é do tipo Date (sem hora)
+    active = db.Column(db.Boolean, default=True, nullable=True) 
+
     
     def __repr__(self):
         return f'<Lista {self.name}>'
@@ -61,7 +63,8 @@ def create_list(name, description, tag=None, data_closing=None):
         description=description,
         tag=tag,
         data_create=data_create,  # Passando a data sem a hora
-        data_closing=data_closing
+        data_closing=data_closing,
+        active=True
     )
 
     # Adicionando a nova lista à sessão do banco de dados
@@ -78,8 +81,68 @@ def list_all_lists():
     :return: Lista de objetos Lista.
     """
     # Recupera todas as listas ordenadas pelo campo 'data_create' (se quiser ordenar de forma diferente, altere aqui)
-    listas = Lista.query.all()
+    listas = Lista.query.filter(Lista.active.isnot(False)).all()
     return listas
+
+
+def get_list_id(list_id):
+    """
+    Função para recuperar uma lista pelo seu ID.
+
+    :param list_id: O ID da lista a ser recuperada.
+    :return: A Lista correspondente ao ID fornecido ou None se não encontrado.
+    """
+    # Tenta buscar a lista no banco de dados pelo ID
+    
+    lista = Lista.query.get(list_id)
+
+    if lista:
+        return lista
+    else:
+        return None 
+
+
+
+
+def update_list_id(list_id , name=None, description=None, tag=None, data_closing=None):
+    
+    lista = get_list_id(list_id)
+    
+    if name:
+        lista.name = name
+    if description:
+        lista.description = description
+    if tag:
+        lista.tag = tag
+
+
+    # Converter data_closing para date, se necessário
+    if isinstance(data_closing, str):
+        try:
+            # Tenta converter a string para um objeto date
+            data_closing = datetime.strptime(data_closing, '%Y-%m-%d').date()
+        except ValueError:
+            raise ValueError("Formato de data inválido para 'data_closing'. Use o formato 'YYYY-MM-DD'.")
+    
+    if data_closing:
+        lista.data_closing = data_closing
+    
+    db.session.commit()
+    return lista
+
+def delete_list_id(list_id):
+
+
+    lista = get_list_id(list_id)
+        
+    if lista:
+        lista.active = False
+        db.session.commit()
+
+    return lista
+
+
+
 
 
 
